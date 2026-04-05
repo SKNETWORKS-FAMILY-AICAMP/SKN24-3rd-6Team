@@ -1,38 +1,25 @@
 import os 
+from typing import Protocol
 
+from openai import OpenAI
 from sentence_transformers import SentenceTransformer
 
 _EMBEDDING_MODEL = os.getenv("EMBEDDING_MODEL")
 
 
-class Embedder:
-  """
-  텍스트를 숫자 벡터로 변환하는 임베딩 클래스.
+# duck typing을 이용한 Embedder 인터페이스
+class EmbedderProtocol(Protocol):
+  vector_size: int
+  def embed(self, texts: list[str]) -> list[list[float]]: ...
+  def embed_question(self, text: str) -> list[float]: ...
 
-  '임베딩'이란 텍스트의 의미를 숫자 배열(벡터)로 표현하는 기술입니다.
-  의미가 비슷한 텍스트는 벡터 공간에서 가까운 위치에 놓이게 되므로,
-  유사한 문서를 검색하거나 비교할 때 활용됩니다.
 
-  사용 예:
-    embedder = Embedder()
-    vector = embedder.embed_question("전세 보증금은 얼마인가요?")
-  """
-
-  def __init__(self, model_name: str = _EMBEDDING_MODEL) -> None:
-    """
-    Embedder를 초기화합니다.
-
-    모델을 처음 불러올 때 인터넷에서 다운로드가 발생할 수 있습니다.
-    이후 실행부터는 로컬 캐시를 사용하므로 빠릅니다.
-
-    Args:
-      model_name: 사용할 임베딩 모델 이름.
-                  기본값은 환경변수 EMBEDDING_MODEL에서 읽어옵니다.
-                  예: "paraphrase-multilingual-MiniLM-L12-v2"
-    """
+class HFEmbedder:
+  """sentence-transformers 기반 로컬 임베더"""
+  def __init__(self, model_name: str) -> None:
     self._model = SentenceTransformer(model_name)
     self.vector_size = self._model.get_sentence_embedding_dimension()
-
+    
   def embed(self, texts: list[str]) -> list[list[float]]:
     """
     여러 텍스트를 한꺼번에 벡터로 변환합니다.
@@ -66,5 +53,25 @@ class Embedder:
     Returns:
       텍스트를 표현하는 float 벡터 (1차원 리스트).
       예: [0.12, -0.34, 0.78, ...]
-    """
+    """ 
     return self.embed([text])[0]
+
+
+class OpenAIEmbedder:
+  """OpenAI Embeddings API 기반 임베더(text-embedding-3-small 전용)"""
+  def __init__(self) -> None:
+    self._client = OpenAI()
+    self.vector_size = 1536
+
+  def embed(self, texts: list[str]) -> list[list[float]]:
+    resp = self._client.embeddings.create(model="text-embedding-3-small", input=texts)
+    return [item.embedding for item in resp.data]
+  
+  def embed_question(self, text: str) -> list[float]:
+    return self.embed([text])[0]
+  
+
+def Embedder(model_name: str = _EMBEDDING_MODEL) -> EmbedderProtocol:
+  if model_name and model_name.startswith("text-embedding-"):
+    return OpenAIEmbedder()
+  return HFEmbedder(model_name)
