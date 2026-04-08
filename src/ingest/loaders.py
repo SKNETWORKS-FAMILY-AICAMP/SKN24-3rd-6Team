@@ -61,11 +61,13 @@ def load_expc(path: str | Path) -> Iterator[LoadedChunk]:
     if not text:
       continue
     outer = row.get("metadata", {})
+    # 청킹 후 JSONL은 metadata가 이중 중첩됨 (metadata.metadata.안건명)
+    inner = outer.get("metadata", outer)
     meta = {
       "doc_type": "법령해석례",
-      "chunk_id": outer.get("안건번호"),
-      "title": outer.get("안건명"),
-      "source_id": outer.get("법령해석례일련번호"),
-      "회신일자": outer.get("회신일자"),
+      "chunk_id": inner.get("안건번호"),
+      "title": inner.get("안건명"),
+      "source_id": inner.get("법령해석례일련번호"),
+      "회신일자": inner.get("회신일자"),
     }
     yield text, meta

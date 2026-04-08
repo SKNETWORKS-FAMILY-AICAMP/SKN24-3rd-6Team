@@ -12,8 +12,8 @@ def _batched(stream: Iterator[LoadedChunk], size: int) -> Iterator[list[LoadedCh
     if len(batch) >= size:
       yield batch
       batch = []
-    if batch:
-      yield batch
+  if batch:
+    yield batch
       
 
 def build_index(
