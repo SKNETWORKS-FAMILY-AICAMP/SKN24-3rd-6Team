@@ -1,7 +1,11 @@
 from langchain_tavily import TavilySearch
-from src.graph.state import State
+from langchain.chat_models import init_chat_model 
 from langgraph.graph.message import add_messages
 from langchain_core.messages import HumanMessage, AIMessage, SystemMessage, ToolMessage
+from src.graph.state import State
+
+# LLM 초기화
+llm = init_chat_model('openai:gpt-4.1-mini')
 
 # Tavily 검색 도구 — PDF 5번: 링크 요청 시에만 사용
 tavily_tool = TavilySearch(max_results=3)
@@ -35,7 +39,9 @@ def generator(state: State) -> dict:
 
     # 검색된 문서를 컨텍스트로 조합
     context = "\n\n".join(
-        f"[출처: {doc['metadata'].get('source', '알 수 없음')}]\n{doc['content']}"
+        f"[출처: {doc.get('title', '알 수 없음')} / {doc.get('doc_type', '')}]\n{doc.get('text', '')}"
+       # f"[출처: {doc['metadata'].get('source', '알 수 없음')}]\n{doc['content']}"
+        
         for doc in retrieved_docs
     )
 
