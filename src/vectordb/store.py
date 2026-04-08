@@ -71,6 +71,7 @@ class QdrantStore:
     self,
     texts: list[str],
     metadatas: list[dict[str, Any]] | None = None,
+    timeout: int = 120,
   ) -> None:
     """
     Chunk 임베딩 후 Vector DB에 저장
@@ -78,15 +79,16 @@ class QdrantStore:
     Args:
       texts (list[str]): 임베딩할 텍스트 청크 목록
       metadatas (list[dict[str, Any]], optional): 각 텍스트에 대응하는 메타데이터 (ex. 법령, 조문번호...)
+      timeout (int, optional): upsert 요청 타임아웃 초 (default 120)
     """
     if not texts:
       return
-    
+
     # 만약 메타데이터 없음 빈 dict로 채움
     # => zip 사용 시 오류 방지
     metadatas = metadatas or [{} for _ in texts]
     vectors = self._embedder.embed(texts)
-    
+
     points = [
       PointStruct(
         id=uuid4(),
@@ -95,7 +97,11 @@ class QdrantStore:
       )
       for text, vec, meta in zip(texts, vectors, metadatas)
     ]
-    self._client.upsert(collection_name=self._collection, points=points)
+    self._client.upsert(
+      collection_name=self._collection,
+      points=points,
+      timeout=timeout,
+    )
     
   # RAG 검색
   def search(
