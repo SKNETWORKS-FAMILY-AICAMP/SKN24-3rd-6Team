@@ -6,9 +6,10 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-# ── API 키 ──────────────────────────────────────────────
-OPENAI_API_KEY: str = os.getenv("OPENAI_API_KEY", "")
-OPENAI_MODEL: str = os.getenv("OPENAI_MODEL", "gpt-4o-mini")
+# ── LLM ────────────────────────────────────────────────
+LLM_API_KEY: str = os.getenv("LLM_API_KEY", "")
+LLM_MODEL: str = os.getenv("LLM_MODEL", "LGAI-EXAONE/EXAONE-3.5-7.8B-Instruct")
+LLM_BASE_URL: str = os.getenv("LLM_BASE_URL", "")
 
 # ── Qdrant ──────────────────────────────────────────────
 QDRANT_PATH: str = os.getenv("QDRANT_PATH", "./db")
