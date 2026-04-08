@@ -18,7 +18,7 @@ DEFAULT_COLLECTION = "legal"
 DEFAULT_SOURCES = [
   (load_eflaw, str(ROOT / "data/processed/eflaw_chunks.jsonl")),
   (load_prec, str(ROOT / "data/processed/prec_chunk_recursive_character.jsonl")),
-  (load_expc, str(ROOT / "data/processed/expc_for_embedding.jsonl")),
+  (load_expc, str(ROOT / "data/processed/expc_after_chunking.jsonl")),
 ]
 
 
