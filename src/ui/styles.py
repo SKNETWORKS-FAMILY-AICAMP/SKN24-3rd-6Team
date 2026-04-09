@@ -187,6 +187,18 @@ button[kind="headerNoPadding"] {
   color: #1B2838;
 }
 
+/* 어시스턴트 메시지 내 링크 */
+[data-testid="stChatMessage"] a {
+  color: #007AB8;
+  text-decoration: none;
+  border-bottom: 1px solid rgba(0, 122, 184, 0.3);
+  transition: all 0.15s ease;
+}
+[data-testid="stChatMessage"] a:hover {
+  color: #009ACC;
+  border-bottom-color: #009ACC;
+}
+
 /* ── 채팅 입력 ───────────────────────────── */
 [data-testid="stChatInput"] {
   border-radius: 14px;
@@ -370,6 +382,37 @@ footer { visibility: hidden; }
 /* 사이드바 내 divider */
 [data-testid="stSidebar"] hr {
   border-color: rgba(0, 0, 0, 0.06);
+}
+
+/* ── 첨부 + 버튼 (채팅 입력 왼쪽) ────────── */
+/* 마커 span 숨기기 */
+[data-testid="stElementContainer"]:has(.attach-trigger-marker) {
+  position: absolute !important;
+  width: 0 !important;
+  height: 0 !important;
+  overflow: hidden !important;
+}
+/* 마커 바로 다음의 Streamlit 버튼 컨테이너 숨기기 */
+[data-testid="stElementContainer"]:has(.attach-trigger-marker)
+  + [data-testid="stElementContainer"] {
+  position: absolute !important;
+  width: 0 !important;
+  height: 0 !important;
+  overflow: hidden !important;
+  opacity: 0 !important;
+}
+/* iframe (JS 주입용) 컨테이너도 숨기기 */
+[data-testid="stElementContainer"]:has(.attach-trigger-marker)
+  + [data-testid="stElementContainer"]
+  + [data-testid="stElementContainer"] {
+  position: absolute !important;
+  width: 0 !important;
+  height: 0 !important;
+  overflow: hidden !important;
+}
+
+[data-testid="stBottom"] [data-testid="stChatInput"] {
+  margin-left: 58px;
 }
 </style>
 """

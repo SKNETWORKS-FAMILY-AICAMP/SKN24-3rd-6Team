@@ -14,11 +14,10 @@ from src.graph import run as run_graph
 from src.ui.components.chat import render_chat_history, render_chat_input
 from src.ui.components.consent import show_consent_dialog
 from src.ui.components.sidebar import render_sidebar
-from src.ui.components.uploader import render_uploader
 from src.ui.session import add_message, get_current_chat, init_session
 from src.ui.styles import dot_loading_html, get_global_css, welcome_html
 
-_DISCLAIMER = "이 내용은 법적 조언이 아닌 정보 제공 목적입니다."
+_DISCLAIMER = "저희는 직접적인 법적 자문을 제공하지 않습니다. 제공된 정보는 일반적인 안내를 위한 것이며, 구체적인 상황에 따라 다르게 적용될 수 있습니다. 중요한 결정 전에 반드시 전문가와 상담하시기 바랍니다."
 _ERROR_MSG = "죄송합니다, 일시적인 오류가 발생했습니다. 잠시 후 다시 시도해주세요."
 
 logger = logging.getLogger(__name__)
@@ -121,19 +120,14 @@ def main() -> None:
     st.info("개인정보 수집·이용에 동의해야 서비스를 이용할 수 있습니다.")
     return
 
-  # PDF 업로드
-  with st.expander("📄 계약서 PDF 업로드", expanded=False):
-    pdf_text = render_uploader()
-    if pdf_text and f"pdf_processed_{chat['id']}" not in st.session_state:
-      st.session_state[f"pdf_processed_{chat['id']}"] = True
-      handle_pdf_input(pdf_text)
-      st.rerun()
-
   # 채팅 이력
   render_chat_history()
 
-  # 입력창
-  render_chat_input(on_submit=handle_user_message)
+  # 입력창 (+ 버튼으로 PDF 첨부 포함)
+  render_chat_input(
+    on_submit=handle_user_message,
+    on_pdf_submit=handle_pdf_input,
+  )
 
 
 if __name__ == "__main__":

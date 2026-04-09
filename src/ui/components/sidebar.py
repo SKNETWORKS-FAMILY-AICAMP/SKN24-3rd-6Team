@@ -74,6 +74,6 @@ def render_sidebar() -> bool:
     # 하단 정보
     st.markdown('<div style="height: 2rem;"></div>', unsafe_allow_html=True)
     st.divider()
-    st.caption("법적 조언이 아닌 정보 제공 목적입니다")
+    st.caption("저희 서비스는 직접적인 법적 자문이 아닌 단순 조언을 위한 정보 제공을 목적으로 합니다. 중요한 결정 전에 반드시 전문가와 상담하시기 바랍니다.")
 
   return needs_consent
