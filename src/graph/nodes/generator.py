@@ -27,22 +27,28 @@ GENERATOR_SYSTEM_PROMPT = """\
 - 법률적 판단이나 개인 법률 자문은 제공하지 않습니다.
 - 간결하고 명확하게 답변하세요."""
 
+MAX_HISTORY = 10    # history 로그가 너무 길어질 것을 대비하여
+
+
 
 def generator(state: State) -> dict:
-    """PDF 5번: 검색 문서 기반 답변 생성 + needs_link일 때만 Tavily Tool 사용"""
+    """검색 문서 기반 답변 생성 + needs_link일 때만 Tavily Tool 사용"""
     user_input     = state['user_input']
     retrieved_docs = state.get('retrieved_docs', [])
     needs_link     = state.get('needs_link', False)
 
-    # 검색된 문서를 컨텍스트로 조합
-    # store.search()는 {"score": ..., "text": ..., **meta} 형태의 flat dict를 반환
+    # 최근 'MAX_HISTORY'개만큼의 채팅로그를 input받도록 설정
+    history = state.get('messages', [])[-MAX_HISTORY:]
+
+    # (개선점) 'source' 확인...
     context = "\n\n".join(
-        f"[출처: {doc.get('doc_type', '알 수 없음')}]\n{doc.get('text', '')}"
+        f"[출처: {doc['metadata'].get('source', '알 수 없음')}]\n{doc['content']}"
         for doc in retrieved_docs
     )
 
     messages = [
         SystemMessage(content=GENERATOR_SYSTEM_PROMPT),
+        *history,
         HumanMessage(content=f"참고 문서:\n{context}\n\n질문: {user_input}")
     ]
 
@@ -69,6 +75,7 @@ def generator(state: State) -> dict:
         final_response = llm.invoke(messages)
 
     return {
+        'messages': [HumanMessage(content=state['user_input'])],    # messages는 사람 - Ai - 사람 - Ai 식의 티키타카 구조로 저장되기를 원함.
+                                                                    # generator에 도달했으면 fallback은 없을 것이므로 여기서 사용자의 input을 messages에 append
         'final_answer': final_response.content,
-        'messages': [final_response]
     }

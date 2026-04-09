@@ -55,13 +55,15 @@ def retrieve(state: State) -> State:
   """Qdrant에서 사용자 질의와 관련된 문서를 검색한다.
 
   Args:
-    state: 파이프라인 상태. user_input과 intent_metadata 필요.
+    state: 파이프라인 상태. user_query과 intent_metadata 필요.
+      user_input 대신 user_query를 꼭 사용해야하는 이유는 user_input이 길고 장황할 때를 대비하여,
+      user_input의 주요 내용을 담은 user_query로 유사도 검색을 유의미하게 만들고자 하기 위함.
 
   Returns:
     retrieved_docs와 similarity_score 키가 갱신된 상태.
   """
   store = _get_store()
-  query = state["user_input"]
+  query = state.get("user_query") or state["user_input"]
   metadata = state.get("intent_metadata", {})
 
   filters = _build_filter(metadata)

@@ -6,13 +6,13 @@ from src.graph.state import State
 from src.llm import llm
 
 
-
+# source가 꼭 필요할까...? 어떤 출력값이길 원하는거지???
 MODERATOR_2_SYSTEM_PROMPT = """
 사용자의 질문을 분석해서 아래 JSON만 반환하세요. 설명 없이.
 
 분석 항목:
 1. intent_metadata: 벡터 DB 검색에 사용할 필터
-   - doc_type: 질문에 대한 답변 래퍼런스 카테고리 (다음 중 선택: "법령", "법령해석례", "판례")            >>> 이거는 판례/법령/해석례 등으로 category를 보도록 하는 게 나을 거 같은데..?
+   - doc_type: 질문에 대한 답변 래퍼런스 카테고리 (다음 중 선택: "법령", "법령해석례", "판례")
    - source: 참고할 출처 (파악 가능할 때만)
 2. is_definitive: 확답을 요구하는 질문인지 여부
    - True 예시: "~이 맞나요?", "반드시 ~해야 하나요?", "~가 100% 맞죠?" "답변에 대해 책임을 질 수 있어요?", # fewshot prompting
@@ -93,4 +93,4 @@ def route_after_intent_understanding(state: State) -> str:
     if state['is_definitive']:
         print(state['fallback_message'])
 
-    return END if state['is_definitive'] else 'retrieve'
+    return END if state['is_definitive'] else 'query_summary'
