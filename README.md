@@ -22,12 +22,12 @@
 
 ---
 
-# 🏠 AI기반 임대차계약서 검토 서비스
+# 🏠 AI기반 부동산 계약 조항 검토 서비스
 
 ## 2. 프로젝트 개요
 
 ### 프로젝트명
-**AI기반 부동산 임대차 계약서 검토 서비스 
+**AI기반 부동산 계약 조항 검토 서비스 
 
 ### 프로젝트 소개
 - 부동산 임대차 계약은 보증금, 특약, 계약 기간 등 꼼꼼히 따져야 할 내용이 많지만, 법률 지식이 부족한 사회 초년생이나 일반 임차인이 스스로 모든 정보나 내용을 파악하기 쉽지 않습니다.
@@ -161,7 +161,6 @@
 | 임베딩 모델 | sentence-transformers (kure-v1) |
 | Orchestration | LangChain, LangGraph |
 | 웹 검색 | Tavily Search |
-| PDF 파싱 | pypdf |
 
 
 ### 사용 모델 (Model Specifications)
@@ -325,7 +324,6 @@
 ## 8. DB 연동 구현 코드
 
 https://github.com/SKNETWORKS-FAMILY-AICAMP/SKN24-3rd-6Team/blob/main/scripts/build_vectorstore.py
-
 
 ## 9. 테스트 계획 및 결과 보고서
 ### 테스트 계획
