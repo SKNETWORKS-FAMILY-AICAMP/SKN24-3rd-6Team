@@ -8,7 +8,7 @@
 
 ### 팀명
 
-> 
+> 아이고~~ 청년!
 
 ### 팀원
 
@@ -90,6 +90,7 @@
 > **임대차 계약 내용을 법령·판례 근거로 질의응답할 수 있는 일반인 대상 서비스는 현재 존재하지 않음!**
 
 (비교분석표 이미지 첨부)
+<img width="986" height="317" alt="국내 부동산 서비스 비교 분석표" src="https://github.com/user-attachments/assets/1f1f7369-c6e1-4096-9a66-349e0b41769b" />
 
 ---
 
@@ -167,26 +168,27 @@
 | 구분 | 선택모델 | 주요 특징 및 채택 이유 |
 |------|------|------|
 | Embedding | kure-v1 | 한국어 법률 도메인 특화 성능 및 문장 간 유사도 측정 우수 |
-| LLM | EXAONE-3.5-7.8B-Instruct | LG AI Research의 한국어 특화 오픈소스 모델, OpenAI 호환 엔드포인트(vLLM)로 연결 |
+| LLM | openai | 성능적인 부분에 있어서는 EXAONE 보단 떨어졌지만 최종 결과물에 있어서 속도, 성능에서 우수 |
 
+<img width="727" height="230" alt="임베딩 모델 평가 결과표" src="https://github.com/user-attachments/assets/0992c225-4e3d-412f-a826-77d79185a7ee" />
 
 ---
 
 ## 4. 시스템 아키텍처
 
-(시스템 아키텍처 이미지 첨부)
+
 
 ---
 
 ## 5. WBS
 
-(WBS 이미지 첨부)
+<img width="1014" height="505" alt="WBS" src="https://github.com/user-attachments/assets/4a09d025-1e4e-4577-8ea0-76b699bc52e5" />
 
 ---
 
 ## 6. 요구사항 명세서
 
-(요구사항 명세서 이미지 첨부)
+<img width="1234" height="552" alt="요구사항명세서" src="https://github.com/user-attachments/assets/20a1df99-1781-4323-8fdf-7ac979f26ec8" />
 
 ---
 
