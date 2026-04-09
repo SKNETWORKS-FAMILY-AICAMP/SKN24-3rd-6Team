@@ -27,6 +27,9 @@ GENERATOR_SYSTEM_PROMPT = """\
 - 법률적 판단이나 개인 법률 자문은 제공하지 않습니다.
 - 간결하고 명확하게 답변하세요."""
 
+MAX_HISTORY = 10    # history 로그가 너무 길어질 것을 대비하여
+
+
 
 def generator(state: State) -> dict:
     """PDF 5번: 검색 문서 기반 답변 생성 + needs_link일 때만 Tavily Tool 사용"""
@@ -34,15 +37,18 @@ def generator(state: State) -> dict:
     retrieved_docs = state.get('retrieved_docs', [])
     needs_link     = state.get('needs_link', False)
 
-    # 검색된 문서를 컨텍스트로 조합
-    # store.search()는 {"score": ..., "text": ..., **meta} 형태의 flat dict를 반환
+    # 최근 'MAX_HISTORY'개만큼의 채팅로그를 input받도록 설정
+    history = state.get('messages', [])[-MAX_HISTORY:]
+
+    # (개선점) 'source' 확인...
     context = "\n\n".join(
-        f"[출처: {doc.get('doc_type', '알 수 없음')}]\n{doc.get('text', '')}"
+        f"[출처: {doc['metadata'].get('source', '알 수 없음')}]\n{doc['content']}"
         for doc in retrieved_docs
     )
 
     messages = [
         SystemMessage(content=GENERATOR_SYSTEM_PROMPT),
+        *history,
         HumanMessage(content=f"참고 문서:\n{context}\n\n질문: {user_input}")
     ]
 
@@ -70,5 +76,4 @@ def generator(state: State) -> dict:
 
     return {
         'final_answer': final_response.content,
-        'messages': [final_response]
     }

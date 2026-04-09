@@ -35,5 +35,4 @@ def formatter(state: State) -> dict:
 
     return {
         'final_answer': response.content,
-        'messages': [AIMessage(content=response.content)]
     }

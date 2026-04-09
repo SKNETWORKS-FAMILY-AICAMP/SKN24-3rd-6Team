@@ -24,7 +24,8 @@ class State(TypedDict, total=False):
   messages: Annotated[List, add_messages] # 메시지 히스토리 저장 (세션 아이디에 따라 저장하진 않을 것이기 때문에)
 
   # ── 전처리 ──────────────────────────────────────────
-  # user_query: str
+  user_query: str
+  user_request: str
 
   # ── 모더레이션 (입력) ───────────────────────────────
   is_sensitive: bool
