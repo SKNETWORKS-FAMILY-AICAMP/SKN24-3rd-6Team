@@ -167,7 +167,7 @@
 | 구분 | 선택모델 | 주요 특징 및 채택 이유 |
 |------|------|------|
 | Embedding | kure-v1 | 한국어 법률 도메인 특화 성능 및 문장 간 유사도 측정 우수 |
-| LLM | openai | 성능적인 부분에 있어서는 EXAONE 보단 떨어졌지만 최종 결과물에 있어서 속도, 성능에서 우수 |
+| LLM | gpt-4o-mini | 전반적인 속도 및 비용 면에서 우수 |
 
 <img width="727" height="230" alt="임베딩 모델 평가 결과표" src="https://github.com/user-attachments/assets/0992c225-4e3d-412f-a826-77d79185a7ee" />
 
